@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if(i!=(-1) && j!=(-1))
         {
-            v[i][j]=1;
+            v[i][j]=1; //PonerTodo
         }
     }
 
