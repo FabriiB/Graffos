@@ -1,7 +1,9 @@
 package com.example.fadi.graffos;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -9,20 +11,26 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
+
+    int mat[][] = new int[20][20];
     ArrayList<Nodo> circulos = new ArrayList<Nodo>();
     ArrayList<Arista> rayas = new ArrayList<Arista>();
     LinearLayout parent;
+    TextView text;
     public Button bt1,bt2,bt3;
     public boolean nodo = false, arista = false,aristafinal = false;
     @SuppressLint("WrongViewCast")
@@ -32,9 +40,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        text = (TextView) findViewById(R.id.text);
         parent = (LinearLayout)findViewById(R.id.parent);
         View MyView = new MyView(this);
         parent.addView(MyView);
+        for(int i=0;i<20;i++)
+        {
+            for(int j=0;j<20;j++)
+            {
+                mat[i][j]=0;
+
+            }
+        }
         bt1=(Button)findViewById(R.id.bt1);
         bt2=(Button)findViewById(R.id.bt2);
         bt3=(Button)findViewById(R.id.bt3);
@@ -64,6 +81,23 @@ public class MainActivity extends AppCompatActivity {
             arista = false;
             changeColor();
         }
+    }
+
+    public void dialogo(View view){
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.custom_dialog);
+        String aux="";
+        for(int i=0;i<20;i++)
+        {
+            aux=aux+"\n";
+            for(int j=0;j<20;j++)
+            {
+                aux=aux+mat[i][j]+"\t";
+            }
+        }
+        text.setText(aux);
+        dialog.show();
     }
 
     public void changeColor(){
@@ -166,6 +200,7 @@ public class MainActivity extends AppCompatActivity {
                         _y = e.getY();
                         cordX.add(e.getX());
                         cordY.add(e.getY());
+                        createNodo(e.getX(),e.getY());
                         invalidate();
                     }
                     else if(arista){
@@ -183,6 +218,38 @@ public class MainActivity extends AppCompatActivity {
 
             return true;
 
+        }
+
+        public void createNodo(float x, float y) {
+            int id= circulos.size();
+            Log.d("id",""+circulos.size());
+            Nodo a = new Nodo(x,y,id);
+            circulos.add(a);
+        }
+
+        public void createArista(float x1,float x2,float y1, float y2) {
+            boolean dir=false;
+            int i=(-1),j=(-1);
+            Arista a = new Arista(x1,y1,x2,y2,dir);
+            for(Nodo aux:circulos)
+            {
+                if(aux.getX()==x1 && aux.getY()==y1)
+                {
+                    i=aux.getId();
+                }
+            }
+            for(Nodo aux:circulos)
+            {
+                if(aux.getX()==x2 && aux.getY()==y2)
+                {
+                    j=aux.getId();
+                }
+            }
+            if(i>=0 && j>=0)
+            {
+                mat[i][j]=1;
+            }
+            rayas.add(a);
         }
 
         public void existe(float xx,float yy){
@@ -207,65 +274,46 @@ public class MainActivity extends AppCompatActivity {
                     cordYB.clear();
                     arista = true;
                     aristafinal = false;
+                    createArista(cordX1.get(0),cordY1.get(0),cordX2.get(0),cordY2.get(0));
                 }
             }
         }
     }
 
-
-
-    // Creacion programatica del Nodo y agregandolo a un ArrayList
-    public void createNodo() {
-        float x=0,y=0;
-        boolean selected=false;
-        int id=circulos.size();
-        Nodo a = new Nodo(x,y,selected,id);
-        circulos.add(a);
-    }
-
-
-    // Asignar aristas
-    public void createArista() {
-        float x1=0,y1=0,x2=0,y2=0;
-        boolean dir=false;
-        Arista a = new Arista(x1,y1,x2,y2,dir);
-        conexion(x1,y1,x2,y2);
-        rayas.add(a);
-    }
 
 
     //Llenar la matriz de conexiones al momento de hacer la arista entre los dos
-    public void conexion(float x1,float y1,float x2,float y2)
-    {
-        int i=(-1),j=(-1); //Valores a manera de flags para posicionar en la matriz
-        for(Nodo a:circulos)
-        {
-            if(i==(-1)) {
-                if (x1 == a.getX() && y1 == a.getY()) {
-                    i = a.getId();
-                } else if (x2 == a.getX() && y2 == a.getY()) {
-                    i=a.getId();
-                }
-            }
-            else
-                break;
-        }
-        for(Nodo a:circulos)
-        {
-            if(j==(-1)) {
-                if (x1 == a.getX() && y1 == a.getY()) {
-                    j = a.getId();
-                } else if (x2 == a.getX() && y2 == a.getY()) {
-                    j=a.getId();
-                }
-            }
-            else
-                break;
-        }
-        if(i!=(-1) && j!=(-1))
-        {
-//            v[i][j]=1; //PonerTodo
-        }
-    }
+//    public void conexion(float x1,float y1,float x2,float y2)
+//    {
+//        int i=(-1),j=(-1); //Valores a manera de flags para posicionar en la matriz
+//        for(Nodo a:circulos)
+//        {
+//            if(i==(-1)) {
+//                if (x1 == a.getX() && y1 == a.getY()) {
+//                    i = a.getId();
+//                } else if (x2 == a.getX() && y2 == a.getY()) {
+//                    i=a.getId();
+//                }
+//            }
+//            else
+//                break;
+//        }
+//        for(Nodo a:circulos)
+//        {
+//            if(j==(-1)) {
+//                if (x1 == a.getX() && y1 == a.getY()) {
+//                    j = a.getId();
+//                } else if (x2 == a.getX() && y2 == a.getY()) {
+//                    j=a.getId();
+//                }
+//            }
+//            else
+//                break;
+//        }
+//        if(i!=(-1) && j!=(-1))
+//        {
+////            v[i][j]=1; //PonerTodo
+//        }
+//    }
 
 }
