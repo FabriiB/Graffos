@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Graffos.iml" filepath="$PROJECT_DIR$/Graffos.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AlgoApp.iml" filepath="$PROJECT_DIR$/AlgoApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

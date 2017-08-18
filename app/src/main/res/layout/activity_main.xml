@@ -6,37 +6,57 @@
     android:orientation="vertical"
     android:layout_height="match_parent"
     tools:context="com.example.fadi.graffos.MainActivity">
-    <SurfaceView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:id="@+id/sf1"
-        android:layout_weight="1"/>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_height="wrap_content">
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_weight="0"
-            android:layout_height="wrap_content"
-            android:id="@+id/bt1"
-            android:onClick="hacernodo"
-            android:text="Nodo"/>
-        <Button
-            android:layout_weight="0"
-            android:id="@+id/bt2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="hacerarista"
-            android:text="Arista"/>
-        <Button
-            android:id="@+id/bt3"
-            android:layout_weight="0"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="clear"
-            android:text="Borrar"/>
-    </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:gravity="center|bottom"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/child"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/bt1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:gravity="center|bottom"
+                android:onClick="hacernodo"
+                android:text="Nodo" />
+
+            <Button
+                android:id="@+id/bt2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:gravity="center|bottom"
+                android:onClick="hacerarista"
+                android:text="Arista" />
+
+            <Button
+                android:id="@+id/bt3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:gravity="center|bottom"
+                android:onClick="clear"
+                android:text="Borrar" />
+            <Button
+                android:id="@+id/bt4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:gravity="center|bottom"
+                android:onClick="dialogo"
+                android:text="Matriz" />
+        </LinearLayout>
+
+    </LinearLayout>
 
 </LinearLayout>

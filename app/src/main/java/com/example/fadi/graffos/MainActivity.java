@@ -3,19 +3,14 @@ package com.example.fadi.graffos;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -30,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Nodo> circulos = new ArrayList<Nodo>();
     ArrayList<Arista> rayas = new ArrayList<Arista>();
     LinearLayout parent;
-    TextView text;
+    TextView dialogopapu;
     public Button bt1,bt2,bt3;
     public boolean nodo = false, arista = false,aristafinal = false;
     @SuppressLint("WrongViewCast")
@@ -40,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        text = (TextView) findViewById(R.id.text);
         parent = (LinearLayout)findViewById(R.id.parent);
         View MyView = new MyView(this);
         parent.addView(MyView);
@@ -86,17 +80,40 @@ public class MainActivity extends AppCompatActivity {
     public void dialogo(View view){
         Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         dialog.setContentView(R.layout.custom_dialog);
-        String aux="";
-        for(int i=0;i<20;i++)
+        dialogopapu = (TextView) dialog.findViewById(R.id.paraladialog);
+        String aux="Matriz Adyacente\n";
+        int s=0;
+        int cols[]=new int[circulos.size()];
+        for(int g=0;g<circulos.size();g++)
         {
-            aux=aux+"\n";
-            for(int j=0;j<20;j++)
-            {
-                aux=aux+mat[i][j]+"\t";
-            }
+            cols[g]=0;
         }
-        text.setText(aux);
+        for(int i=0;i<circulos.size();i++)
+        {
+            s=0;
+            aux=aux+"\n\n\t\t";
+            for(int j=0;j<circulos.size();j++)
+            {
+                cols[j]+=mat[i][j];
+                aux=aux+mat[i][j]+"\t\t";
+                s+=mat[i][j];
+            }
+            aux=aux+" = "+s;
+        }
+        aux=aux+"\n";
+        for(int i=0;i<circulos.size();i++)
+        {
+            aux=aux+"\t\t||";
+        }
+        aux=aux+"\n";
+        for(int i=0;i<circulos.size();i++)
+        {
+            aux=aux+"\t\t"+cols[i];
+        }
+        Log.e("Matriz",""+aux);
+        dialogopapu.setText(aux);
         dialog.show();
     }
 
@@ -223,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
         public void createNodo(float x, float y) {
             int id= circulos.size();
             Log.d("id",""+circulos.size());
-            Nodo a = new Nodo(x,y,id);
+            Nodo a = new Nodo(x,y,true,id);
             circulos.add(a);
         }
 
@@ -231,16 +248,20 @@ public class MainActivity extends AppCompatActivity {
             boolean dir=false;
             int i=(-1),j=(-1);
             Arista a = new Arista(x1,y1,x2,y2,dir);
+            Log.e("Puntos 1",""+x1+","+x2);
+            Log.e("Puntos 2",""+y1+","+y2);
+
             for(Nodo aux:circulos)
             {
-                if(aux.getX()==x1 && aux.getY()==y1)
+                Log.e("Comparar",""+aux.getX()+","+aux.getY());
+                if((aux.getX()>=(x1-50.0) && aux.getX()<=(x1+50.0)) && (aux.getY()>=(x2-50.0) && aux.getY()<=(x2+50.0)))
                 {
                     i=aux.getId();
                 }
             }
             for(Nodo aux:circulos)
             {
-                if(aux.getX()==x2 && aux.getY()==y2)
+                if((aux.getX()>=(y1-50.0) && aux.getX()<=(y1+50.0)) && (aux.getY()>=(y2-50.0) && aux.getY()<=(y2+50.0)))
                 {
                     j=aux.getId();
                 }
@@ -248,6 +269,7 @@ public class MainActivity extends AppCompatActivity {
             if(i>=0 && j>=0)
             {
                 mat[i][j]=1;
+                mat[j][i]=1;
             }
             rayas.add(a);
         }
@@ -274,7 +296,14 @@ public class MainActivity extends AppCompatActivity {
                     cordYB.clear();
                     arista = true;
                     aristafinal = false;
-                    createArista(cordX1.get(0),cordY1.get(0),cordX2.get(0),cordY2.get(0));
+                    String yo="";
+                    for(Nodo aux:circulos)
+                    {
+                        yo=yo+"Nodo: "+aux.getId()+"\n";
+                        yo=yo+aux.getX()+"\n"+aux.getY()+"\n";
+                    }
+                    Log.e("Lista",""+yo);
+                    createArista(cordX1.get(i-1),cordY1.get(i-1),cordX2.get(i-1),cordY2.get(i-1));
                 }
             }
         }
