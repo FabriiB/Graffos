@@ -16,6 +16,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
@@ -138,6 +139,24 @@ public class MainActivity extends AppCompatActivity {
     {
         limpio();
     }
+    public void calcurango(View view)
+    {
+        int s=0,rango=0;
+        for(int i=0;i<circulos.size();i++)
+        {
+            s=0;
+            for(int j=0;j<circulos.size();j++)
+            {
+                if(mat[i][j]>0)
+                {
+                    s++;
+                }
+            }
+            if(s>rango)
+                rango=s;
+        }
+        Toast.makeText(MainActivity.this, "Rango: "+rango, Toast.LENGTH_SHORT).show();
+    }
 
     public void limpio()
     {
@@ -240,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
         public void createNodo(float x, float y) {
             int id= circulos.size();
             Log.d("id",""+circulos.size());
-            Nodo a = new Nodo(x,y,true,id);
+            Nodo a = new Nodo(x,y,id);
             circulos.add(a);
         }
 

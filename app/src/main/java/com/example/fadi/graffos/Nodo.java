@@ -6,7 +6,6 @@ package com.example.fadi.graffos;
 
 public class Nodo {
     private float x, y;
-    private boolean selected;
     private int id;
 
     public Nodo(float x, float y, int id) {
